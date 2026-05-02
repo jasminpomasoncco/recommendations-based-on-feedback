@@ -38,6 +38,11 @@ ANTHROPIC_API_KEY=tu_clave_aqui
 ANTHROPIC_MODEL=claude-opus-4-7
 ```
 
+## Scripts (Windows)
+
+- Levantar el server: `./scripts/run_dev.ps1`
+- Probar healthcheck: `./scripts/health_check.ps1`
+
 ## Uso
 
 Abre http://127.0.0.1:8000/docs y usa el endpoint POST /analyze para enviar tu archivo.
