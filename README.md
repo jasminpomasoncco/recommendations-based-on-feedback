@@ -1,50 +1,66 @@
 # Customer Feedback Insights
 
-Aplicación en Python con FastAPI para analizar comentarios de clientes desde un archivo Excel o CSV y convertirlos en insights de negocio usando RAG y Claude de Anthropic.
+A Python FastAPI service that analyzes customer feedback from Excel or CSV files and turns it into business insights using RAG and Anthropic Claude.
 
-## ¿Para qué sirve?
+## What it does
 
-Sirve para leer feedback, encontrar temas repetidos, detectar problemas frecuentes y generar recomendaciones accionables de forma automática.
+Reads feedback, finds recurring themes, detects frequent problems, and automatically generates actionable recommendations.
 
-## Qué usa
+## Stack
 
-- FastAPI: API principal
-- sentence-transformers: embeddings
-- FAISS: búsqueda semántica
-- Claude: análisis final con LLM
+- **FastAPI** — main API
+- **sentence-transformers** — embeddings
+- **FAISS** — semantic search
+- **Claude (Anthropic)** — final LLM analysis
 
-## Archivos principales
+## Project files
 
-- main.py: endpoint de la API
-- rag.py: embeddings y recuperación de contexto
-- llm.py: llamada a Claude
-- utils.py: lectura de Excel/CSV
+- `main.py` — API endpoint
+- `rag.py` — embeddings and context retrieval
+- `llm.py` — Claude call
+- `utils.py` — Excel/CSV reading
+- `mcp_server/server.py` — MCP server for Claude Code CLI integration
 
-## Cómo correrlo
+## Running the server
 
 ```bash
 pip install -r requirements.txt
 uvicorn main:app --reload
-o 
+# or
 py -m uvicorn main:app --reload
 ```
 
-## Configuración
+## Configuration
 
-Crear un archivo .env con:
+Create a `.env` file with:
 
 ```env
-ANTHROPIC_API_KEY=tu_clave_aqui
+ANTHROPIC_API_KEY=your_key_here
 ANTHROPIC_MODEL=claude-opus-4-7
 ```
 
+## MCP Server (Claude Code CLI)
+
+A custom MCP server is included for use with Claude Code CLI. It exposes 6 tools:
+
+| Tool | Description |
+|------|-------------|
+| `validate_csv` | Validates a file before sending it to the API |
+| `call_analyze` | Calls `POST /analyze` and returns the result |
+| `save_result` | Analyzes and persists the result to SQLite |
+| `list_analyses` | Lists saved analysis history |
+| `get_analysis` | Retrieves a saved analysis by ID |
+| `compare_analyses` | Diffs two saved analyses |
+ 
+The FastAPI server must be running for `call_analyze` and `save_result` to work.
+
 ## Scripts (Windows)
 
-- Levantar el server: `./scripts/run_dev.ps1`
-- Probar healthcheck: `./scripts/health_check.ps1`
+- Start the server: `./scripts/run_dev.ps1`
+- Health check: `./scripts/health_check.ps1`
 
-## Uso
+## Usage
 
-Abre http://127.0.0.1:8000/docs y usa el endpoint POST /analyze para enviar tu archivo.
+Open http://127.0.0.1:8000/docs and use the `POST /analyze` endpoint to upload your file.
 
-El archivo debe incluir una columna de texto como comentarios o Text.
+The file must include a text column named `comentarios`, `comment`, `comments`, or `text`.

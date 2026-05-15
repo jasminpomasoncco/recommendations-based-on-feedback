@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "feedback-pipeline": {
+      "command": "D:\\visual_code_proyectos\\Proyectos ML\\Recommendations_Feedback\\.venv\\Scripts\\python.exe",
+      "args": ["mcp_server/server.py"]
+    }
+  }
+}

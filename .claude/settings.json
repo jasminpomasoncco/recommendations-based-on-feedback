@@ -1,0 +1,52 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(py -m uvicorn*)",
+      "Bash(uvicorn*)",
+      "Bash(pip install*)",
+      "Bash(pip show*)",
+      "Bash(py mcp_server/server.py*)",
+      "Bash(curl http://127.0.0.1:8000*)",
+      "Bash(Invoke-WebRequest*)",
+      "Read(**)",
+      "Write(*.py)",
+      "Write(*.json)",
+      "Write(*.csv)",
+      "Write(*.txt)",
+      "Write(.claude/**)"
+    ],
+    "deny": [
+      "Bash(git push*)",
+      "Bash(git reset --hard*)",
+      "Bash(rm -rf*)",
+      "Bash(Remove-Item -Recurse*)",
+      "Write(.env)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "curl -s http://127.0.0.1:8000/health 2>$null || echo 'Server is not running — start it with: py -m uvicorn main:app --reload'",
+            "description": "Checks that the server is still responding after editing a file"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '[pre-bash hook] Command to be executed registered'",
+            "description": "Log of Bash commands before execution"
+          }
+        ]
+      }
+    ]
+  }
+}
